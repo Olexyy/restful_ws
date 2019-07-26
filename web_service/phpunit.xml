@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+        <env name="MAIL_DRIVER" value="array"/>
+        <env name="PHP_VERSION" value="7.2"/>
+        <env name="MYSQL_VERSION" value="5.7"/>
+        <env name="APACHE_VERSION" value="2.4.32"/>
+        <env name="DB_ROOT_USERNAME" value="root"/>
+        <env name="DB_ROOT_PASSWORD" value="rootpassword"/>
+        <env name="DB_NAME" value="dbtest"/>
+        <env name="DB_USERNAME" value="otherUser"/>
+        <env name="DB_PASSWORD" value="password"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_HOST" value="mysql"/>
+        <env name="PROJECT_ROOT" value="./web_service"/>
+        <env name="STAGE" value="dev"/>
+    </php>
+</phpunit>
