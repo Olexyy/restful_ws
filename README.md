@@ -24,4 +24,5 @@ Provides very basic restful web service.
  - search queries (related method not yet implemented)
  - tests for search queries
  - test resource controllers
+ - coding standards
  
