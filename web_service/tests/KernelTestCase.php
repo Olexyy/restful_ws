@@ -15,6 +15,8 @@ use RestfulWS\Core\KernelInterface;
 abstract class KernelTestCase extends TestCase {
 
   /**
+   * App kernel.
+   *
    * @var KernelInterface
    */
   protected $kernel;
@@ -38,6 +40,8 @@ abstract class KernelTestCase extends TestCase {
   }
 
   /**
+   * Database getter.
+   *
    * @return DatabaseInterface|null
    */
   public function getDatabase() {

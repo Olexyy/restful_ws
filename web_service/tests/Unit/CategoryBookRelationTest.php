@@ -19,21 +19,29 @@ use Tests\KernelTestCase;
 class CategoryBookRelationTest extends KernelTestCase {
 
   /**
+   * Generator.
+   *
    * @var ModelFactoryInterface
    */
   protected $bookFactory;
 
   /**
+   * Storage.
+   *
    * @var StorageInterface
    */
   protected $bookStorage;
 
   /**
+   * Generator
+   *
    * @var ModelFactoryInterface
    */
   protected $categoryFactory;
 
   /**
+   * Storage.
+   *
    * @var StorageInterface
    */
   protected $categoryStorage;

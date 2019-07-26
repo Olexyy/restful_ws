@@ -2,6 +2,8 @@
 
 namespace RestfulWS\Core\Components\Router;
 
+use RestfulWS\Core\Components\Controller\Controller;
+
 /**
  * Interface RouteMatchInterface.
  *
@@ -18,35 +20,58 @@ interface RouteMatchInterface {
   public static function create();
 
   /**
-   * @return mixed
+   * Getter.
+   *
+   * @return Controller
+   *   Controller.
    */
   public function getController();
 
   /**
-   * @param mixed $controller
-   * @return RouteMatch
+   * Setter.
+   *
+   * @param Controller $controller
+   *   Controller.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setController($controller);
 
   /**
-   * @return mixed
+   * Getter.
+   *
+   * @return string
+   *   Value.
    */
   public function getMethod();
 
   /**
+   * Setter.
+   *
    * @param mixed $method
-   * @return RouteMatch
+   *   Method.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setMethod($method);
 
   /**
-   * @return mixed
+   * Getter.
+   *
+   * @return array
+   *   Value.
    */
   public function getArgs();
 
   /**
-   * @param mixed $args
-   * @return RouteMatch
+   * Setter.
+   * @param mixed|array $args
+   *   Args.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setArgs($args);
 

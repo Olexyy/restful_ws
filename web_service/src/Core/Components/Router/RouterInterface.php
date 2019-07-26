@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 interface RouterInterface {
 
   /**
-   * Route match is conventional.
+   * Route match process.
    *
    * @param Request $request
    *   Request.
@@ -24,14 +24,24 @@ interface RouterInterface {
   public function match(Request $request);
 
   /**
+   * Setter.
+   *
    * @param array|Callable $onNotFound
-   * @return Router
+   *   Value.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setOnNotFound($onNotFound);
 
   /**
+   * Setter.
+   *
    * @param array|Callable $onException
-   * @return Router
+   *   Value.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setOnException($onException);
 
@@ -55,6 +65,7 @@ interface RouterInterface {
    * Routes.
    *
    * @return ParameterBag
+   *   Collection.
    */
   public function getRoutes();
 
@@ -62,6 +73,7 @@ interface RouterInterface {
    * Resources.
    *
    * @return ParameterBag
+   *   Collection.
    */
   public function getResources();
 

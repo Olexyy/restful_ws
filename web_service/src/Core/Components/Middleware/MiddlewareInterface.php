@@ -14,9 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 interface MiddlewareInterface {
 
   /**
-   * MiddlewareInterface constructor.
+   * Middleware constructor.
+   *
    * @param KernelInterface $kernel
+   *   Kernel.
    * @param MiddlewareInterface|NULL $next
+   *   Next handler.
    */
   public function __construct(KernelInterface $kernel, MiddlewareInterface $next = NULL);
 

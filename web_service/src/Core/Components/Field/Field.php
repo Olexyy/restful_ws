@@ -12,36 +12,50 @@ use RestfulWS\Core\Components\Storage\StorageInterface;
 class Field implements FieldInterface {
 
   /**
+   * Field name.
+   *
    * @var string
    */
   protected $name;
 
   /**
+   * Defines if field is relation to other model.
+   *
    * @var bool
    */
   protected $hasManyTrough;
 
   /**
+   * Intermediate table of field.
+   *
    * @var string
    */
   protected $table;
 
   /**
+   * This model storage.
+   *
    * @var StorageInterface
    */
   protected $modelStorage;
 
   /**
+   * Joined model storage.
+   *
    * @var StorageInterface
    */
   protected $joinStorage;
 
   /**
+   * Field type.
+   *
    * @var string
    */
   protected $type;
 
   /**
+   * Field settings.
+   *
    * @var array
    */
   protected $settings;
@@ -49,8 +63,10 @@ class Field implements FieldInterface {
   /**
    * Field constructor.
    *
-   * @param $name
-   * @param $type
+   * @param string $name
+   *   Field name.
+   * @param string $type
+   *   Field type.
    */
   public function __construct($name, $type) {
 
@@ -60,10 +76,15 @@ class Field implements FieldInterface {
   }
 
   /**
-   * @param $name
-   * @param $type
+   * Field inline constructor.
    *
-   * @return Field
+   * @param string $name
+   *   Field name.
+   * @param string $type
+   *   Field type.
+   *
+   * @return $this
+   *   Instance.
    */
   public static function create($name, $type) {
 
@@ -73,7 +94,8 @@ class Field implements FieldInterface {
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getTable() {
 
@@ -83,7 +105,8 @@ class Field implements FieldInterface {
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getModelTable() {
 
@@ -93,18 +116,19 @@ class Field implements FieldInterface {
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getJoinTable() {
 
     return $this->joinStorage->getTable();
   }
 
-
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getName() {
 
@@ -114,7 +138,8 @@ class Field implements FieldInterface {
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getType() {
 
@@ -190,8 +215,11 @@ class Field implements FieldInterface {
    * Setter.
    *
    * @param string $table
+   *   Table name.
    * @param StorageInterface $joinStorage
+   *   Storage of joined model.
    * @param StorageInterface $modelStorage
+   *   Storage of this model.
    *
    * @return $this
    *   Chaining.
@@ -275,6 +303,7 @@ class Field implements FieldInterface {
    * Getter.
    *
    * @return string
+   *   Value.
    */
   public function getField() {
 
@@ -285,6 +314,7 @@ class Field implements FieldInterface {
    * Getter.
    *
    * @return string
+   *   Value.
    */
   public function getJoinField() {
 
@@ -292,7 +322,10 @@ class Field implements FieldInterface {
   }
 
   /**
+   * Getter for Model that is joined.
+   *
    * @return string
+   *   Classname.
    */
   public function getJoinClass() {
 
@@ -300,8 +333,10 @@ class Field implements FieldInterface {
   }
 
   /**
+   * Getter for intermediate table creation.
    *
    * @return string
+   *   Statement.
    */
   public function getCreateIntermediateStatement() {
 

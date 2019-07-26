@@ -11,6 +11,12 @@ use RestfulWS\Core\Components\Storage\BookStorage;
  */
 class Book extends Model {
 
+  /**
+   * Getter for storage.
+   *
+   * @return BookStorage|\RestfulWS\Core\Components\Storage\Storage
+   *   Storage.
+   */
   public static function getStorage() {
 
     return static::$storage ?: new BookStorage();

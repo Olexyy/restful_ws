@@ -21,14 +21,19 @@ class Middleware {
   protected $kernel;
 
   /**
+   * Next middleware.
+   *
    * @var MiddlewareInterface|null
    */
   protected $next;
 
   /**
    * Middleware constructor.
+   *
    * @param KernelInterface $kernel
+   *   Kernel.
    * @param MiddlewareInterface|NULL $next
+   *   Next handler.
    */
   public function __construct(KernelInterface $kernel, MiddlewareInterface $next = NULL) {
 

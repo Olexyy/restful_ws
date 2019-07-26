@@ -109,6 +109,9 @@ abstract class ModelTestCase extends KernelTestCase {
     $this->assertEquals('changed', $res->get('name'));
   }
 
+  /**
+   * Test model delete workflow.
+   */
   public function testModelDelete() {
 
     $count = 3;

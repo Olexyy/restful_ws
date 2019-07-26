@@ -11,14 +11,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class BasicController extends Controller {
 
+  /**
+   * Controller callback.
+   *
+   * @return JsonResponse
+   *   Response.
+   */
   public function health() {
 
-    $a = 1;
     return new JsonResponse([
       'health' => 'ok'
     ]);
   }
 
+  /**
+   * Controller callback.
+   *
+   * @return JsonResponse
+   *   Response.
+   */
   public function notFound() {
 
     return new JsonResponse([
@@ -26,6 +37,12 @@ class BasicController extends Controller {
     ], 404);
   }
 
+  /**
+   * Controller callback.
+   *
+   * @return JsonResponse
+   *   Response.
+   */
   public function exception() {
 
     return new JsonResponse([

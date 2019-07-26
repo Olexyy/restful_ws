@@ -65,7 +65,7 @@ class Router implements RouterInterface {
   }
 
   /**
-   * Route match is conventional.
+   * Route match process.
    *
    * @param Request $request
    *   Request.
@@ -126,7 +126,10 @@ class Router implements RouterInterface {
   }
 
   /**
+   * Getter.
+   *
    * @return RouteMatchInterface
+   *   Route match.
    */
   protected function getRouteMatch() {
 
@@ -160,8 +163,13 @@ class Router implements RouterInterface {
   }
 
   /**
+   * Setter.
+   *
    * @param array|Callable $onNotFound
-   * @return Router
+   *   Value.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setOnNotFound($onNotFound)
   {
@@ -170,8 +178,13 @@ class Router implements RouterInterface {
   }
 
   /**
+   * Setter.
+   *
    * @param array|Callable $onException
-   * @return Router
+   *   Value.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setOnException($onException)
   {
@@ -183,6 +196,7 @@ class Router implements RouterInterface {
    * Routes.
    *
    * @return ParameterBag
+   *   Collection.
    */
   public function getRoutes() {
 
@@ -193,6 +207,7 @@ class Router implements RouterInterface {
    * Resources.
    *
    * @return ParameterBag
+   *   Collection.
    */
   public function getResources() {
 

@@ -9,6 +9,11 @@ namespace RestfulWS\Core\Components\Database;
  */
 class Database implements DatabaseInterface {
 
+  /**
+   * Connection.
+   *
+   * @var null|\PDO
+   */
   protected $connection;
 
   /**
@@ -18,12 +23,32 @@ class Database implements DatabaseInterface {
    */
   protected static $instance;
 
+  /**
+   * Username.
+   *
+   * @var string
+   */
   protected $user;
 
+  /**
+   * Password.
+   *
+   * @var string
+   */
   protected $pass;
 
+  /**
+   * Database name.
+   *
+   * @var string
+   */
   protected $database;
 
+  /**
+   * Host name.
+   *
+   * @var string
+   */
   protected $host;
 
   /**
@@ -47,10 +72,16 @@ class Database implements DatabaseInterface {
   }
 
   /**
-   * @param $user
-   * @param $pass
-   * @param $host
-   * @param $database
+   * Singleton.
+   *
+   * @param string $user
+   *   User name.
+   * @param string $pass
+   *   Password.
+   * @param string $host
+   *   Hostname.
+   * @param string $database
+   *   Database.
    *
    * @return $this
    *   Instance.
@@ -68,6 +99,7 @@ class Database implements DatabaseInterface {
    * Connection getter.
    *
    * @return null|\PDO
+   *   Connection.
    */
   public function getConnection() {
 
@@ -94,7 +126,7 @@ class Database implements DatabaseInterface {
   public function tableExists($table) {
 
     $query = <<<SQL
-SELECT COUNT(*) as count 
+SELECT COUNT(*) AS count 
 FROM information_schema.TABLES 
 WHERE TABLE_SCHEMA = '{$this->database}' AND TABLE_NAME = '{$table}'
 SQL;

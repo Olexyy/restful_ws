@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class Controller {
 
   /**
+   * Current request.
+   *
    * @var Request
    */
   protected $request;

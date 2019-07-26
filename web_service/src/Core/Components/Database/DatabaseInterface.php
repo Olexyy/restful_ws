@@ -10,10 +10,16 @@ namespace RestfulWS\Core\Components\Database;
 interface DatabaseInterface {
 
   /**
-   * @param $user
-   * @param $pass
-   * @param $host
-   * @param $database
+   * Singleton.
+   *
+   * @param string $user
+   *   User name.
+   * @param string $pass
+   *   Password.
+   * @param string $host
+   *   Hostname.
+   * @param string $database
+   *   Database.
    *
    * @return $this
    *   Instance.

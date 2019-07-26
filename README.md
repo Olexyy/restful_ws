@@ -9,6 +9,7 @@ Provides very basic restful web service.
  - To run project in container run `docker-compose up` in root scope.
  - Default health check endpoint is `http://localhost:8000`.
  - Run tests: `docker-compose exec php php ./vendor/bin/phpunit`.
+ - Project uses Drupal 8 php coding standards.
 
 ### Specs:
  - Examples:

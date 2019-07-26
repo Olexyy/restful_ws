@@ -23,7 +23,8 @@ class RouterMiddleware extends Middleware implements MiddlewareInterface {
    */
   public function handle(Request $request) {
 
-    $routeMatch = $this->kernel->getRouter()
+    $routeMatch = $this->kernel
+      ->getRouter()
       ->match($request);
 
     return call_user_func_array($routeMatch->getCallable(), $routeMatch->getArgs());

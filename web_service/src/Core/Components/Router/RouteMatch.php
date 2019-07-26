@@ -44,52 +44,73 @@ class RouteMatch implements RouteMatchInterface {
   }
 
   /**
-   * @return mixed
+   * Getter.
+   *
+   * @return Controller
+   *   Controller.
    */
-  public function getController()
-  {
+  public function getController() {
+
     return $this->controller;
   }
 
   /**
-   * @param mixed $controller
-   * @return RouteMatch
+   * Setter.
+   *
+   * @param Controller $controller
+   *   Controller.
+   *
+   * @return $this
+   *   Chaining.
    */
-  public function setController($controller)
-  {
+  public function setController($controller) {
+
     $this->controller = $controller;
     return $this;
   }
 
   /**
-   * @return mixed
+   * Getter.
+   *
+   * @return string
+   *   Value.
    */
-  public function getMethod()
-  {
+  public function getMethod() {
+
     return $this->method;
   }
 
   /**
+   * Setter.
+   *
    * @param mixed $method
-   * @return RouteMatch
+   *   Method.
+   *
+   * @return $this
+   *   Chaining.
    */
-  public function setMethod($method)
-  {
+  public function setMethod($method) {
     $this->method = $method;
     return $this;
   }
 
   /**
-   * @return mixed
+   * Getter.
+   *
+   * @return array
+   *   Value.
    */
-  public function getArgs()
-  {
+  public function getArgs() {
     return $this->args;
   }
 
   /**
-   * @param mixed $args
-   * @return RouteMatch
+   * Setter.
+   * @param mixed|array $args
+   *   Args.
+   *
+   * @return $this
+   *   Chaining.
    */
   public function setArgs($args)
   {

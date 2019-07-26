@@ -26,37 +26,47 @@ interface FieldInterface {
   /**
    * Field constructor.
    *
-   * @param $name
-   * @param $type
+   * @param string $name
+   *   Field name.
+   * @param string $type
+   *   Field type.
    */
   public function __construct($name, $type);
 
   /**
-   * @param $name
-   * @param $type
+   * Field inline constructor.
    *
-   * @return Field
+   * @param string $name
+   *   Field name.
+   * @param string $type
+   *   Field type.
+   *
+   * @return $this
+   *   Instance.
    */
   public static function create($name, $type);
 
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getTable();
 
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getModelTable();
 
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getJoinTable();
 
@@ -70,7 +80,8 @@ interface FieldInterface {
   /**
    * Getter.
    *
-   * @return mixed
+   * @return string
+   *   Value.
    */
   public function getType();
 
@@ -118,8 +129,11 @@ interface FieldInterface {
    * Setter.
    *
    * @param string $table
+   *   Table name.
    * @param StorageInterface $joinStorage
+   *   Storage of joined model.
    * @param StorageInterface $modelStorage
+   *   Storage of this model.
    *
    * @return $this
    *   Chaining.
@@ -151,8 +165,10 @@ interface FieldInterface {
   public function hasManyTrough();
 
   /**
+   * Getter.
    *
    * @return string
+   *   Value.
    */
   public function getCreateIntermediateStatement();
 
@@ -160,6 +176,7 @@ interface FieldInterface {
    * Getter.
    *
    * @return string
+   *   Value.
    */
   public function getField();
 
@@ -167,11 +184,15 @@ interface FieldInterface {
    * Getter.
    *
    * @return string
+   *   Value.
    */
   public function getJoinField();
 
   /**
+   * Getter.
+   *
    * @return string
+   *   Value.
    */
   public function getJoinClass();
 

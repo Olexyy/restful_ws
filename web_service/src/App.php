@@ -32,7 +32,7 @@ class App implements KernelBuilderInterface {
       ->addService('config', function () {
         return new ParameterBag($_ENV);
       })
-      ->addService('router', function (KernelInterface $kernel) {
+      ->addService('router', function () {
         return new Router();
       })
       ->addService('database', function (KernelInterface $kernel) {
