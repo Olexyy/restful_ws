@@ -1,8 +1,8 @@
-##Restful Web Service `restful_ws`
+## Restful Web Service `restful_ws`
 
 Provides very basic restful web service.
 
-###Tips:
+### Tips:
  - Uses composer autoloader and some Symfony dependencies so `composer install` should be run in `web_service` scope.
  - Uses `docker-compose` so `docker` and `docker-compose` should be installed.
  - Ports are `8000` for Apache and `3306` Mysql.
@@ -10,7 +10,7 @@ Provides very basic restful web service.
  - Default health check endpoint is `http://localhost:8000`.
  - Run tests: `docker-compose exec php php ./vendor/bin/phpunit`.
 
-###Specs:
+### Specs:
  - Examples:
  ```
  curl localhost:8000/api/books -d '{"title":"Harry Potter The Chamber of Secrets", "author":"J. K. Rowling", "words": 10000, "year": 1998}' -X POST
@@ -20,7 +20,7 @@ Provides very basic restful web service.
  curl localhost:8000/api/books/1 -X DELETE
  ```
  
- ###TODO:
+ ### TODO:
  - search queries (related method not yet implemented)
  - tests for search queries
  - test resource controllers
