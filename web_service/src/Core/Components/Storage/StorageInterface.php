@@ -5,6 +5,7 @@ namespace RestfulWS\Core\Components\Storage;
 use RestfulWS\Core\Components\Database\DatabaseInterface;
 use RestfulWS\Core\Components\Field\FieldInterface;
 use RestfulWS\Core\Components\Model\ModelInterface;
+use RestfulWS\Core\Components\Query\QueryBuilderInterface;
 
 /**
  * Interface StorageInterface.
@@ -107,10 +108,10 @@ interface StorageInterface {
   /**
    * Query handler.
    *
-   * @param array $query
+   * @param QueryBuilderInterface $query
    *   Search query.
    */
-  public function where(array $query);
+  public function where(QueryBuilderInterface $query);
 
   /**
    * Execute result.

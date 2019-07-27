@@ -75,54 +75,49 @@ class Router implements RouterInterface {
    */
   public function match(Request $request) {
 
-    try {
-      $pathInfo = $request->getPathInfo();
-      foreach ($this->routes as $path => $routeData) {
-        $matches = [];
-        if (preg_match($path, $pathInfo, $matches)) {
-          array_shift($matches);
-          $method = strtoupper($request->getMethod());
-          if (!$routeData[2] || in_array($method, $routeData[2])) {
-            $controller = new $routeData[0]();
-            if ($controller instanceof Controller) {
-              $controller->setRequest($request);
-
-              return RouteMatch::create()
-                ->setController($controller)
-                ->setMethod($routeData[1])
-                ->setArgs($matches);
-            }
-          }
-        }
-      }
-      foreach ($this->resources as $path => $controller) {
-        $matches = [];
-        if (preg_match($path, $pathInfo, $matches)) {
-          array_shift($matches);
-          $matches = array_filter($matches);
-          $method = strtolower($request->getMethod());
-          $controller = new $controller();
+    $pathInfo = $request->getPathInfo();
+    foreach ($this->routes as $path => $routeData) {
+      $matches = [];
+      if (preg_match($path, $pathInfo, $matches)) {
+        array_shift($matches);
+        $method = strtoupper($request->getMethod());
+        if (!$routeData[2] || in_array($method, $routeData[2])) {
+          $controller = new $routeData[0]();
           if ($controller instanceof Controller) {
-            if (method_exists($controller, $method)) {
-              $controller->setRequest($request);
-              if (!$matches && $method == 'get') {
-                $method = 'index';
-              }
+            $controller->setRequest($request);
 
-              return RouteMatch::create()
-                ->setController($controller)
-                ->setMethod($method)
-                ->setArgs($matches);
-            }
+            return RouteMatch::create()
+              ->setController($controller)
+              ->setMethod($routeData[1])
+              ->setArgs($matches);
           }
         }
       }
-
-      return $this->notFound();
-    } catch (\Exception $exception) {
-
-      return $this->exception();
     }
+    foreach ($this->resources as $path => $controller) {
+      $matches = [];
+      if (preg_match($path, $pathInfo, $matches)) {
+        array_shift($matches);
+        $matches = array_filter($matches);
+        $method = strtolower($request->getMethod());
+        $controller = new $controller();
+        if ($controller instanceof Controller) {
+          if (method_exists($controller, $method)) {
+            $controller->setRequest($request);
+            if (!$matches && $method == 'get') {
+              $method = 'index';
+            }
+
+            return RouteMatch::create()
+              ->setController($controller)
+              ->setMethod($method)
+              ->setArgs($matches);
+          }
+        }
+      }
+    }
+
+    return $this->notFound();
   }
 
   /**

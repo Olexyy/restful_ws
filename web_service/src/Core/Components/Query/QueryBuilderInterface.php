@@ -78,4 +78,12 @@ interface QueryBuilderInterface {
    */
   public function setWhereOperator($operator);
 
+  /**
+   * Getter for binding statement params.
+   *
+   * @return array|string[]
+   *   Params.
+   */
+  public function getStatementParams();
+
 }

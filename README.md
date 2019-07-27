@@ -11,7 +11,7 @@ Provides very basic restful web service.
  - Run tests: `docker-compose exec php php ./vendor/bin/phpunit` from root scope.
  - Seed database and ensure tables:
    `docker-compose exec php php seed.php 5 30`
-   First param is used for categories count. Second is for books count.
+   First param is used for `categories` count. Second is for `books` count.
    Params are not required.
    Expected output: 
    ```
@@ -23,7 +23,7 @@ Provides very basic restful web service.
  - Project uses Drupal 8 php coding standards.
 
 ### Specs:
- - Examples:
+ - Examples of access to resource:
  ```
  curl localhost:8000/api/books -d '{"title":"Harry Potter The Chamber of Secrets", "author":"J. K. Rowling", "words": 10000, "year": 1998}' -X POST
  curl localhost:8000/api/books
@@ -32,7 +32,20 @@ Provides very basic restful web service.
  curl localhost:8000/api/books/1 -X DELETE
  ```
  
+  - Examples of query usage:
+  ```
+  // Get all books with category 2.
+  http://localhost:8000/api/books?filter[1][name]=categories&filter[1][value]=2
+  
+  // Get all books with author John%20Smith.
+  http://localhost:8000/api/books?filter[1][name]=author&filter[1][value]=John%20Smith
+  
+  // Get all books with name like Expedita.
+  http://localhost:8000/api/books?filter[1][name]=name&filter[1][value]=Expedita&filter[1][op]=LIKE
+  
+  // Get 2 books with ids 16 and 17.
+  http://localhost:8000/api/books?filter[1][name]=id&filter[1][value][]=16&filter[1][value][]=17&filter[1][op]=IN
+  ```
+ 
  ### TODO:
- - search queries (related method not yet implemented)
- - tests for search queries
  - test resource controllers

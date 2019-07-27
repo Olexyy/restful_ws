@@ -160,7 +160,7 @@ class Kernel implements KernelInterface {
       return $response;
     } catch (\Exception $exception) {
 
-      return $this->handleException();
+      return $this->handleException($exception);
     }
   }
 
@@ -237,16 +237,27 @@ class Kernel implements KernelInterface {
   /**
    * Handles unexpected situation during runtime.
    *
+   * @param \Exception $exception
+   *   Exception.
+   *
    * @return JsonResponse
    *   Response.
    */
-  protected function handleException() {
+  protected function handleException(\Exception $exception) {
 
-    return call_user_func($this
-      ->getRouter()
+    $controller = $this->getRouter()
       ->exception()
-      ->getCallable()
-    );
+      ->getController();
+    $controller = new $controller();
+    if ($this->getConfig('STAGE')  == 'dev') {
+      $controller->setException($exception);
+    }
+
+    return call_user_func([$controller,
+      $this->getRouter()
+      ->exception()
+      ->getMethod()
+    ]);
   }
 
   /**

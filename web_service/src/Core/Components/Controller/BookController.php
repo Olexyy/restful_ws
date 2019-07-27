@@ -3,6 +3,8 @@
 namespace RestfulWS\Core\Components\Controller;
 
 use RestfulWS\Core\Components\Model\Book;
+use RestfulWS\Core\Components\Query\QueryAdapter;
+use RestfulWS\Core\Components\Query\QueryBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -20,7 +22,10 @@ class BookController extends ResourceController {
    */
   public function index() {
 
-    return new JsonResponse(Book::getStorage()->all());
+    $adapter = QueryAdapter::create(QueryBuilder::create(Book::getStorage()), 5);
+    $query = $adapter->getQuery($this->request);
+
+    return new JsonResponse(Book::getStorage()->where($query));
   }
 
   /**

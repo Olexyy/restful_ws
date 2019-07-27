@@ -8,6 +8,7 @@ use RestfulWS\Core\Components\Database\DatabaseInterface;
 use RestfulWS\Core\Components\Field\Field;
 use RestfulWS\Core\Components\Field\FieldInterface;
 use RestfulWS\Core\Components\Model\ModelInterface;
+use RestfulWS\Core\Components\Query\QueryBuilderInterface;
 
 /**
  * Class Storage.
@@ -316,27 +317,23 @@ SQL;
   /**
    * Query handler.
    *
-   * @param array $query
+   * @param QueryBuilderInterface $query
    *   Search query.
+   *
+   * @return array|ModelInterface[]
+   *   Collection of models.
    */
-  public function where(array $query) {
+  public function where(QueryBuilderInterface $query) {
 
-    $statement = "SELECT * FROM {$this->table} WHERE";
-    $values = [];
-    foreach ($query as $key => $value) {
-      if ($field = $this->getField($key)) {
-        if (!$field->hasManyTrough()) {
-          $values[':' . $key] = $value;
-        }
-      }
-    }
-    $stmt = $this->database->getConnection()->prepare($statement);
-    foreach ($values as $key => $value) {
-      $stmt->bindParam($key, $value);
+    $stmt = $this->database->getConnection()->prepare($query->getStatement());
+    $params = $query->getStatementParams();
+    foreach ($params as $key => $value) {
+      $stmt->bindParam($key, $params[$key]);
     }
     $stmt->execute();
     $stmt->setFetchMode(PDO::FETCH_CLASS, $this->modelClass);
-    $models = $stmt->fetchAll();
+
+    return $stmt->fetchAll();
   }
 
   protected function extractFieldNames(array $valuesArray, $prefixed = FALSE) {

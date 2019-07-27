@@ -45,6 +45,15 @@ class BasicController extends Controller {
    */
   public function exception() {
 
+    if ($this->exception) {
+      $error = $this->exception->getMessage() . $this->exception->getTraceAsString();
+
+      return new JsonResponse([
+        'notice' => 'Details are shown only in "dev" environment.',
+        'error' => $error
+      ], 500);
+    }
+
     return new JsonResponse([
       'error' => 'Internal server error.'
     ], 500);

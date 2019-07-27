@@ -19,6 +19,13 @@ abstract class Controller {
   protected $request;
 
   /**
+   * Exception.
+   *
+   * @var \Exception
+   */
+  protected $exception;
+
+  /**
    * Setter.
    *
    * @param Request $request
@@ -27,6 +34,17 @@ abstract class Controller {
   public function setRequest(Request $request) {
 
     $this->request = $request;
+  }
+
+  /**
+   * Setter.
+   *
+   * @param \Exception $exception
+   *   Exception.
+   */
+  public function setException(\Exception $exception) {
+
+    $this->exception = $exception;
   }
   
 }
