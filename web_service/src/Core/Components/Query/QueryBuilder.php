@@ -36,8 +36,14 @@ class QueryBuilder implements QueryBuilderInterface {
    */
   protected $whereOperator;
 
+  /**
+   * @var string
+   */
   protected $statement;
 
+  /**
+   * @var array
+   */
   protected $statementParams;
 
   /**
