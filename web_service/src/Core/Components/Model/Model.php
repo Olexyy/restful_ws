@@ -281,7 +281,7 @@ abstract class Model implements ModelInterface, \JsonSerializable {
    */
   public function jsonSerialize () {
 
-    return $this->values;
+    return $this->getValues();
   }
 
 }

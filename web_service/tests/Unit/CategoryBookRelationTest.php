@@ -60,6 +60,9 @@ class CategoryBookRelationTest extends KernelTestCase {
     $this->bookStorage->dropSchema();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function tearDown(): void {
 
     parent::tearDown();
