@@ -2,6 +2,7 @@
 
 namespace RestfulWS\Core;
 
+use RestfulWS\Core\Components\Controller\Controller;
 use RestfulWS\Core\Components\Database\DatabaseInterface;
 use RestfulWS\Core\Components\Router\RouterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -249,7 +250,7 @@ class Kernel implements KernelInterface {
       ->exception()
       ->getController();
     $controller = new $controller();
-    if ($this->getConfig('STAGE')  == 'dev') {
+    if ($controller instanceof Controller && $this->getConfig('STAGE')  == 'dev') {
       $controller->setException($exception);
     }
 
