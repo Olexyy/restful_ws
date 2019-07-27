@@ -1,2 +1,4 @@
 vendor
 .idea
+web_service/vendor
+web_service/.phpunit.result.cache

@@ -8,7 +8,18 @@ Provides very basic restful web service.
  - Ports are `8000` for Apache and `3306` Mysql.
  - To run project in container run `docker-compose up` in root scope.
  - Default health check endpoint is `http://localhost:8000`.
- - Run tests: `docker-compose exec php php ./vendor/bin/phpunit`.
+ - Run tests: `docker-compose exec php php ./vendor/bin/phpunit` from root scope.
+ - Seed database and ensure tables:
+   `docker-compose exec php php seed.php 5 30`
+   First param is used for categories count. Second is for books count.
+   Params are not required.
+   Expected output: 
+   ```
+   Created 10 categories.
+   Created 50 books.
+   Mapped 10 categories to 50 books.
+
+   ```
  - Project uses Drupal 8 php coding standards.
 
 ### Specs:
