@@ -25,13 +25,21 @@ interface StorageInterface {
    *
    * @param int|string $id
    *   Id to search.
-   * @param bool $loadRelations
-   *   Flag defines if load relations.
    *
    * @return ModelInterface|null
    *   Model if any.
    */
-  public function find($id, $loadRelations = TRUE);
+  public function find($id);
+
+  /**
+   * Getter for references.
+   *
+   * @param ModelInterface $model
+   *   Model.
+   * @param $fieldName
+   *   Field name.
+   */
+  public function getFieldValue(ModelInterface $model, $fieldName);
 
   /**
    * Models collection.

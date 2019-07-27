@@ -68,7 +68,7 @@ abstract class Model implements ModelInterface, \JsonSerializable {
   protected function mapSelf($notify = FALSE) {
 
     foreach (static::getStorage()->getFields() as $field) {
-      if (isset($this->{$field})) {
+      if (property_exists($this, $field)) {
         $this->set($field, $this->{$field}, $notify);
         unset($this->{$field});
       }
@@ -86,7 +86,7 @@ abstract class Model implements ModelInterface, \JsonSerializable {
   public function map(array $values = [], $notify = TRUE) {
 
     foreach (static::getStorage()->getFields() as $field) {
-      if (isset($values[$field])) {
+      if (array_key_exists($field, $values)) {
         $this->set($field, $values[$field], $notify);
       }
     }
@@ -95,10 +95,21 @@ abstract class Model implements ModelInterface, \JsonSerializable {
   /**
    * Getter for values array.
    *
+   * @param bool $lazy
+   *   Lazy.
+   *
    * @return array|string[]
    *   Values.
    */
-  public function getValues() {
+  public function getValues($lazy = FALSE) {
+
+    if ($lazy) {
+
+      return $this->values;
+    }
+    foreach (static::getStorage()->getSchema() as $field) {
+      $this->get($field->getName());
+    }
 
     return $this->values;
   }
@@ -127,11 +138,13 @@ abstract class Model implements ModelInterface, \JsonSerializable {
    */
   public function has($name) {
 
-    return isset($this->values[$name]);
+    return array_key_exists($name, $this->values);
   }
 
   /**
    * Getter.
+   *
+   * Loads any references.
    *
    * @param string $name
    *   Name.
@@ -144,6 +157,13 @@ abstract class Model implements ModelInterface, \JsonSerializable {
     if ($this->has($name)) {
 
       return $this->values[$name];
+    }
+    if ($field = static::getStorage()->getField($name)) {
+      if ($field->hasManyTrough()) {
+        static::getStorage()->getFieldValue($this, $name);
+
+        return $this->values[$name];
+      }
     }
 
     return NULL;

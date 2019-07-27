@@ -2,6 +2,8 @@
 
 namespace RestfulWS\Core\Components\Model;
 
+use RestfulWS\Core\Components\Storage\Storage;
+
 /**
  * Interface ModelInterface.
  *
@@ -20,10 +22,13 @@ interface ModelInterface {
   /**
    * Getter for values array.
    *
+   * @param bool $lazy
+   *   Lazy.
+   *
    * @return array|string[]
    *   Values.
    */
-  public function getValues();
+  public function getValues($lazy = FALSE);
 
   /**
    * Map values.

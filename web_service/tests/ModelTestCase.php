@@ -50,6 +50,15 @@ abstract class ModelTestCase extends KernelTestCase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function tearDown(): void {
+
+    parent::tearDown();
+    $this->storage->dropSchema();
+  }
+
+  /**
    * Test model schema sync.
    */
   public function testModelUpDown() {

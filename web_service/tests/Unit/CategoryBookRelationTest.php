@@ -60,6 +60,13 @@ class CategoryBookRelationTest extends KernelTestCase {
     $this->bookStorage->dropSchema();
   }
 
+  public function tearDown(): void {
+
+    parent::tearDown();
+    $this->bookStorage->dropSchema();
+    $this->categoryStorage->dropSchema();
+  }
+
   /**
    * Test intermediate table creation.
    */
@@ -75,7 +82,8 @@ class CategoryBookRelationTest extends KernelTestCase {
     $this->assertFalse($category->isNew());
     $book->set('categories', [$category])->save();
     $book = $this->bookStorage->find($book->getId());
-    $this->assertTrue($book->has('categories'));
+    $this->assertFalse($book->has('categories'));
+    $this->assertNotEmpty($book->get('categories'));
     $relatedCategory = current($book->get('categories'));
     $this->assertInstanceOf(ModelInterface::class, $relatedCategory);
     $this->assertEquals($category->getId(), $relatedCategory->getId());
@@ -85,7 +93,8 @@ class CategoryBookRelationTest extends KernelTestCase {
     $secondCategory = $this->categoryFactory->generate()->save();
     $book->set('categories', [$category,$secondCategory])->save();
     $book = $this->bookStorage->find($book->getId());
-    $this->assertTrue($book->has('categories'));
+    $this->assertFalse($book->has('categories'));
+    $this->assertNotEmpty($book->get('categories'));
     $this->assertCount(2, $book->get('categories'));
   }
 

@@ -50,13 +50,11 @@ abstract class Storage implements StorageInterface {
    *
    * @param int|string $id
    *   Id to search.
-   * @param bool $loadRelations
-   *   Flag defines if load relations.
    *
    * @return ModelInterface|null
    *   Model if any.
    */
-  public function find($id, $loadRelations = TRUE) {
+  public function find($id) {
 
     $stmt = $this->database->getConnection()->prepare(
       "SELECT * FROM {$this->table} WHERE id = :id"
@@ -64,30 +62,46 @@ abstract class Storage implements StorageInterface {
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $stmt->setFetchMode(PDO::FETCH_CLASS, $this->modelClass);
-    /** @var ModelInterface $model */
-    $model = $stmt->fetch();
-    if ($model && $model->getId()) {
-      if ($loadRelations) {
-        foreach ($this->getSchema() as $field) {
-          if ($field->hasManyTrough()) {
-            $query = "SELECT * FROM {$field->getJoinTable()}
+
+    return $stmt->fetch();
+  }
+
+  /**
+   * Getter for field value.
+   *
+   * Sets default empty value for it if not set yet.
+   *
+   * @param ModelInterface $model
+   *   Model.
+   * @param $fieldName
+   *   Field name.
+   */
+  public function getFieldValue(ModelInterface $model, $fieldName) {
+
+    if ($field = $this->getField($fieldName)) {
+      if ($field->hasManyTrough()) {
+        $model->set($field->getName(), [], FALSE);
+        if ($id = $model->getId()) {
+          $query = "SELECT * FROM {$field->getJoinTable()}
               JOIN {$field->getTable()}
               ON {$field->getTable()}.{$field->getJoinField()} = {$field->getJoinTable()}.id
               WHERE {$field->getTable()}.{$field->getField()} = :id";
-            $stmt = $this->database->getConnection()->prepare($query);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_CLASS, $field->getJoinClass());
-            $models = $stmt->fetchAll();
-            if ($models) {
-              $model->set($field->getName(), $models, FALSE);
-            }
+          $stmt = $this->database->getConnection()->prepare($query);
+          $stmt->bindParam(':id', $id);
+          $stmt->execute();
+          $stmt->setFetchMode(PDO::FETCH_CLASS, $field->getJoinClass());
+          $models = $stmt->fetchAll();
+          if ($models) {
+            $model->set($field->getName(), $models, FALSE);
           }
         }
       }
+      else {
+        if (!$model->has($field->getName())) {
+          $model->set($field->getName(), NULL, FALSE);
+        }
+      }
     }
-
-    return $model;
   }
 
   /**
@@ -212,7 +226,7 @@ SQL;
     }
     $result = $stmt->execute();
     $model->set('id', $this->database->getConnection()->lastInsertId());
-    if ($references = $this->getReferences($model)) {
+    if ($references = $this->getReferenceValues($model)) {
       foreach ($references as $key => $values) {
         if (($field = $this->getField($key)) && $field->hasManyTrough()) {
           foreach ($values as $value) {
@@ -272,7 +286,6 @@ SQL
     }
     if ($references = $this->getReferencesChanged($model)) {
       foreach ($references as $key => $values) {
-        print (var_export($key));
         if (($field = $this->getField($key)) && $field->hasManyTrough()) {
           $stmt = $this->database->getConnection()->prepare(
 <<<SQL
@@ -497,7 +510,7 @@ SQL;
    * @return array
    *   Model values.
    */
-  protected function getReferences(ModelInterface $model, array $exclude = []) {
+  protected function getReferenceValues(ModelInterface $model, array $exclude = []) {
 
     $values = [];
     foreach ($this->getSchema() as $field) {
