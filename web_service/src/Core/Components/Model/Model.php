@@ -216,7 +216,7 @@ abstract class Model implements ModelInterface, \JsonSerializable {
    */
   public function getId() {
 
-    return $this->get('id');
+    return (int) $this->get('id');
   }
 
   /**
