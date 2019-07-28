@@ -6,14 +6,14 @@ use RestfulWS\Core\Components\Factory\CategoryFactory;
 use RestfulWS\Core\Components\Factory\ModelFactoryInterface;
 use RestfulWS\Core\Components\Model\Category;
 use RestfulWS\Core\Components\Storage\StorageInterface;
-use Tests\ModelTestCase;
+use Tests\ModelCrudTestCase;
 
 /**
  * Class CategoryModelTest.
  *
  * @package Tests\Unit
  */
-class CategoryModelTest extends ModelTestCase {
+class CategoryModelTest extends ModelCrudTestCase {
 
   /**
    * Model factory.

@@ -4,7 +4,6 @@ namespace RestfulWS\Core\Components\Controller;
 
 use RestfulWS\Core\Components\Model\Category;
 use RestfulWS\Core\Components\Query\QueryAdapter;
-use RestfulWS\Core\Components\Query\QueryBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -22,10 +21,9 @@ class CategoryController extends ResourceController {
    */
   public function index() {
 
-    $adapter = QueryAdapter::create(QueryBuilder::create(Category::getStorage()), 5);
-    $query = $adapter->getQuery($this->request);
+    $adapter = QueryAdapter::create(Category::getStorage()->getQuery(), $this->pageSize);
 
-    return new JsonResponse(Category::getStorage()->where($query));
+    return new JsonResponse($adapter->getQuery($this->request)->execute());
   }
 
   /**
@@ -78,7 +76,7 @@ class CategoryController extends ResourceController {
       $book->map($data);
       $book->save();
 
-      return new JsonResponse($book, 201);
+      return new JsonResponse($book, 204);
     }
 
     return NULL;
@@ -98,7 +96,7 @@ class CategoryController extends ResourceController {
     if ($book = Category::getStorage()->find($id)) {
       $book->delete();
 
-      return new JsonResponse(['result' => TRUE], 201);
+      return new JsonResponse(['result' => TRUE], 200);
     }
 
     return NULL;

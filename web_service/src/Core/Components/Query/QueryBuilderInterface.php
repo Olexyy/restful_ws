@@ -2,6 +2,7 @@
 
 namespace RestfulWS\Core\Components\Query;
 
+use RestfulWS\Core\Components\Model\ModelInterface;
 use RestfulWS\Core\Components\Storage\StorageInterface;
 
 /**
@@ -85,5 +86,13 @@ interface QueryBuilderInterface {
    *   Params.
    */
   public function getStatementParams();
+
+  /**
+   * Executes query.
+   *
+   * @return array|ModelInterface[]
+   *   Execution result.
+   */
+  public function execute();
 
 }

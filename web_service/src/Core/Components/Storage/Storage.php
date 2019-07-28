@@ -8,6 +8,7 @@ use RestfulWS\Core\Components\Database\DatabaseInterface;
 use RestfulWS\Core\Components\Field\Field;
 use RestfulWS\Core\Components\Field\FieldInterface;
 use RestfulWS\Core\Components\Model\ModelInterface;
+use RestfulWS\Core\Components\Query\QueryBuilder;
 use RestfulWS\Core\Components\Query\QueryBuilderInterface;
 
 /**
@@ -586,6 +587,17 @@ SQL;
   public function getModelClass() {
 
     return $this->modelClass;
+  }
+
+  /**
+   * Getter for query.
+   *
+   * @return QueryBuilderInterface
+   *   Query builder.
+   */
+  public function getQuery() {
+
+    return QueryBuilder::create($this);
   }
 
 }

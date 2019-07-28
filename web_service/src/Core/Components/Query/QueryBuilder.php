@@ -2,6 +2,7 @@
 
 namespace RestfulWS\Core\Components\Query;
 
+use RestfulWS\Core\Components\Model\ModelInterface;
 use RestfulWS\Core\Components\Storage\StorageInterface;
 
 /**
@@ -234,6 +235,17 @@ class QueryBuilder implements QueryBuilderInterface {
     $this->whereOperator = $operator;
 
     return $this;
+  }
+
+  /**
+   * Executes query.
+   *
+   * @return array|ModelInterface[]
+   *   Execution result.
+   */
+  public function execute() {
+
+    return $this->storage->where($this);
   }
 
 }

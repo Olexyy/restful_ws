@@ -2,8 +2,11 @@
 
 namespace Tests;
 
+use RestfulWS\Core\Components\Factory\BookFactory;
+use RestfulWS\Core\Components\Factory\CategoryFactory;
 use RestfulWS\Core\Components\Factory\ModelFactoryInterface;
-use RestfulWS\Core\Components\Model\ModelInterface;
+use RestfulWS\Core\Components\Model\Book;
+use RestfulWS\Core\Components\Model\Category;
 use RestfulWS\Core\Components\Storage\StorageInterface;
 
 /**
@@ -14,29 +17,32 @@ use RestfulWS\Core\Components\Storage\StorageInterface;
 abstract class ModelTestCase extends KernelTestCase {
 
   /**
+   * Generator.
+   *
    * @var ModelFactoryInterface
    */
-  protected $factory;
+  protected $bookFactory;
 
   /**
+   * Storage.
+   *
    * @var StorageInterface
    */
-  protected $storage;
+  protected $bookStorage;
 
   /**
-   * Model factory.
+   * Generator
    *
-   * @return ModelFactoryInterface
-   *   Model factory.
+   * @var ModelFactoryInterface
    */
-  abstract function getModelFactory();
+  protected $categoryFactory;
 
   /**
-   * Model storage.
+   * Storage.
    *
-   * @return StorageInterface
+   * @var StorageInterface
    */
-  abstract function getModelStorage();
+  protected $categoryStorage;
 
   /**
    * {@inheritdoc}
@@ -44,9 +50,14 @@ abstract class ModelTestCase extends KernelTestCase {
   public function setUp() : void {
 
     parent::setUp();
-    $this->factory = $this->getModelFactory();
-    $this->storage = $this->getModelStorage();
-    $this->storage->dropSchema();
+    $this->bookFactory = new BookFactory();
+    $this->bookStorage = Book::getStorage();
+    $this->categoryFactory = new CategoryFactory();
+    $this->categoryStorage = Category::getStorage();
+    $this->categoryStorage->dropSchema();
+    $this->bookStorage->dropSchema();
+    $this->categoryStorage->ensureSchema();
+    $this->bookStorage->ensureSchema();
   }
 
   /**
@@ -55,92 +66,8 @@ abstract class ModelTestCase extends KernelTestCase {
   public function tearDown(): void {
 
     parent::tearDown();
-    $this->storage->dropSchema();
-  }
-
-  /**
-   * Test model schema sync.
-   */
-  public function testModelUpDown() {
-
-    $res = $this->getDatabase()->tableExists($this->storage->getTable());
-    $this->assertFalse($res);
-    $this->storage->ensureSchema();
-    $res = $this->getDatabase()->tableExists($this->storage->getTable());
-    $this->assertTrue($res);
-  }
-
-  /**
-   * Test model creation workflow.
-   */
-  public function testModelCreation() {
-
-    $this->storage->ensureSchema();
-    $res = $this->storage->count();
-    $this->assertEquals(0, $res);
-    $model = $this->factory->generate();
-    $this->assertTrue($model->isNew());
-    $model->save();
-    $this->assertFalse($model->isNew());
-    $res = $this->storage->count();
-    $this->assertEquals(1, $res);
-  }
-
-  /**
-   * Test model load workflow.
-   */
-  public function testModelLoad() {
-
-    $this->storage->ensureSchema();
-    $model = $this->factory->generate();
-    $model->save();
-    $id = $model->getId();
-    $this->assertNotEmpty($id);
-    $res = $this->storage->find($id);
-    $this->assertInstanceOf(ModelInterface::class, $res);
-    $this->assertEquals($id, $res->getId());
-  }
-
-  /**
-   * Test model update workflow.
-   */
-  public function testModelUpdate() {
-
-    $this->storage->ensureSchema();
-    $model = $this->factory->generate();
-    $model->save();
-    $id = $model->getId();
-    $this->assertNotEmpty($id);
-    $model->set('name', 'changed');
-    $model->save();
-    $res = $this->storage->find($id);
-    $this->assertInstanceOf(ModelInterface::class, $res);
-    $this->assertEquals('changed', $res->get('name'));
-  }
-
-  /**
-   * Test model delete workflow.
-   */
-  public function testModelDelete() {
-
-    $count = 3;
-    $this->storage->ensureSchema();
-    $this->factory->generate($count, TRUE);
-    $res = $this->storage->count();
-    $this->assertEquals($count, $res);
-    $models = $this->storage->all();
-    $this->assertIsArray($models);
-    $this->assertEquals(count($models), $count);
-    $model = current($models);
-    $model->delete();
-    $this->assertEmpty($model->getId());
-    $res = $this->storage->find($model->getId());
-    $this->assertEmpty($res);
-    $res = $this->storage->count();
-    $this->assertEquals($count - 1, $res);
-    $this->storage->deleteAll();
-    $res = $this->storage->count();
-    $this->assertEmpty($res);
+    $this->bookStorage->dropSchema();
+    $this->categoryStorage->dropSchema();
   }
 
 }

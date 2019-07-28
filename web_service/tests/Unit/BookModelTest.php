@@ -6,14 +6,14 @@ use RestfulWS\Core\Components\Factory\BookFactory;
 use RestfulWS\Core\Components\Factory\ModelFactoryInterface;
 use RestfulWS\Core\Components\Model\Book;
 use RestfulWS\Core\Components\Storage\StorageInterface;
-use Tests\ModelTestCase;
+use Tests\ModelCrudTestCase;
 
 /**
  * Class BookModelTest.
  *
  * @package Tests\Unit
  */
-class BookModelTest extends ModelTestCase {
+class BookModelTest extends ModelCrudTestCase {
 
   /**
    * Model factory.

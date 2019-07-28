@@ -50,6 +50,9 @@ class QueryBuilderTest extends KernelTestCase {
     $this->bookStorage->dropSchema();
   }
 
+  /**
+   * Test general query.
+   */
   public function testQueryBuilderGeneral() {
 
     $queryBuilder = QueryBuilder::create($this->bookStorage);

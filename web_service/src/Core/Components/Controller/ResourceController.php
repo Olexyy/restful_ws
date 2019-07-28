@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 abstract class ResourceController extends Controller {
 
   /**
+   * Items to show in ine method.
+   */
+  protected $pageSize = 5;
+
+  /**
    * Controller callback.
    *
    * @return JsonResponse
@@ -59,5 +64,16 @@ abstract class ResourceController extends Controller {
    *   Response.
    */
   abstract public function delete($id = NULL);
+
+  /**
+   * Setter.
+   *
+   * @param int $pageSize
+   *   Page size.
+   */
+  public function setPageSize($pageSize) {
+
+    $this->pageSize = $pageSize;
+  }
 
 }

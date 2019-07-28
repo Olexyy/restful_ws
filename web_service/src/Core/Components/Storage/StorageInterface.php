@@ -160,4 +160,12 @@ interface StorageInterface {
    */
   public function getModelClass();
 
+  /**
+   * Getter for query.
+   *
+   * @return QueryBuilderInterface
+   *   Query builder.
+   */
+  public function getQuery();
+
 }

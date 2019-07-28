@@ -3,14 +3,14 @@
 namespace Tests\Unit;
 
 use RestfulWS\Core\Components\Model\ModelInterface;
-use Tests\MultipleModelTestCase;
+use Tests\ModelTestCase;
 
 /**
  * Class CategoryBookRelationTest.
  *
  * @package Tests\Unit
  */
-class CategoryBookRelationTest extends MultipleModelTestCase {
+class CategoryBookRelationTest extends ModelTestCase {
 
   /**
    * Test intermediate table creation.

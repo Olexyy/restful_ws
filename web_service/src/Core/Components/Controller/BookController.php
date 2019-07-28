@@ -4,7 +4,6 @@ namespace RestfulWS\Core\Components\Controller;
 
 use RestfulWS\Core\Components\Model\Book;
 use RestfulWS\Core\Components\Query\QueryAdapter;
-use RestfulWS\Core\Components\Query\QueryBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -22,10 +21,9 @@ class BookController extends ResourceController {
    */
   public function index() {
 
-    $adapter = QueryAdapter::create(QueryBuilder::create(Book::getStorage()), 5);
-    $query = $adapter->getQuery($this->request);
+    $adapter = QueryAdapter::create(Book::getStorage()->getQuery(), $this->pageSize);
 
-    return new JsonResponse(Book::getStorage()->where($query));
+    return new JsonResponse($adapter->getQuery($this->request)->execute());
   }
 
   /**
@@ -98,7 +96,7 @@ class BookController extends ResourceController {
     if ($book = Book::getStorage()->find($id)) {
       $book->delete();
 
-      return new JsonResponse(['result' => TRUE], 201);
+      return new JsonResponse(['result' => TRUE], 200);
     }
 
     return NULL;

@@ -79,7 +79,7 @@ class QueryAdapter implements QueryAdapterInterface {
     }
     $this->builder->setLimit($this->limit);
     if ($page = $request->query->getInt('page', 0)) {
-      $offset = $page > 0 ? $page * $this->limit : 0;
+      $offset = $page > 0 ? ($page -1) * $this->limit : 0;
       $this->builder->setOffset($offset);
     }
 
