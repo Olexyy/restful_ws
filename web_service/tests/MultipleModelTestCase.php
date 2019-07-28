@@ -14,7 +14,7 @@ use RestfulWS\Core\Components\Storage\StorageInterface;
  *
  * @package Tests
  */
-class MultipleModelTestCase extends KernelTestCase {
+abstract class MultipleModelTestCase extends KernelTestCase {
 
   /**
    * Generator.
