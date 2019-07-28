@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use RestfulWS\Core\Components\Model\Book;
+use RestfulWS\Core\Components\Model\ModelInterface;
 use Tests\ModelTestCase;
 
 /**
@@ -53,6 +55,33 @@ class ResourceRoutesTest extends ModelTestCase {
     $this->assertEquals(200, $res->getStatusCode());
     $this->assertJson($res->getContent());
     $this->assertCount(5, $this->parseJson($res->getContent()));
+  }
+
+  /**
+   * Test creation through api.
+   */
+  public function testCreate() {
+
+    $book = $this->bookFactory->generate(1, FALSE);
+    $this->assertEmpty(Book::getStorage()->count());
+    $res = $this->post('/api/books', $this->toJson($book->getValues(TRUE)));
+    $this->assertEquals(201, $res->getStatusCode());
+    $this->assertEquals(1, $this->bookStorage->count());
+    $book = $this->bookStorage->find(1);
+    $this->assertInstanceOf(ModelInterface::class, $book);
+  }
+
+  /**
+   * Test model update through api.
+   */
+  public function testUpdate() {
+
+    $book = $this->bookFactory->generate(1, TRUE);
+    $book->set('name', 'Changed name');
+    $res = $this->patch('/api/books' . $book->getId(), $this->toJson($book->getValues(TRUE)));
+    $this->assertEquals(204, $res->getStatusCode());
+    $book = $this->bookStorage->find($book->getId());
+    $this->assertEquals('Changed name', $book->get('name'));
   }
 
 }

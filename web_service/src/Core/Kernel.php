@@ -155,7 +155,7 @@ class Kernel implements KernelInterface {
       }
       $response = current($instances)->handle($request);
       if (!$response instanceof Response) {
-        throw new \LogicException('Controller did not return response.');
+        return $this->handleNotFound();
       }
 
       return $response;
@@ -233,6 +233,25 @@ class Kernel implements KernelInterface {
   public function getRouter() {
 
     return $this->getService('router');
+  }
+
+  /**
+   * Not found handler.
+   *
+   * @return Response
+   *   Controller response.
+   */
+  protected function handleNotFound() {
+
+    $controller = $this->getRouter()
+      ->notFound()
+      ->getController();
+
+    return call_user_func([$controller,
+      $this->getRouter()
+        ->notFound()
+        ->getMethod()
+    ]);
   }
 
   /**

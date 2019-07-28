@@ -46,6 +46,4 @@ Provides very basic restful web service.
   // Get 2 books with ids 16 and 17.
   http://localhost:8000/api/books?filter[1][name]=id&filter[1][value][]=16&filter[1][value][]=17&filter[1][op]=IN
   ```
- 
- ### TODO:
- - test resource controllers
+

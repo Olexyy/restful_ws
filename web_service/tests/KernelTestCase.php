@@ -80,9 +80,61 @@ abstract class KernelTestCase extends TestCase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
    *   Kernel response.
    */
-  public function get($url) {
+  public function get($url, $params = []) {
 
-    return $this->call($url);
+    return $this->call($url, 'GET', $params);
+  }
+
+  /**
+   * Executes DELETE request to kernel.
+   *
+   * @param string $url
+   *   Url or path.
+   * @param null|string $body
+   *   Body string.
+   * @param array $params
+   *   Params.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+   *   Kernel response.
+   */
+  public function post($url, $body = NULL, $params = []) {
+
+    return $this->call($url, 'POST', $params, $body);
+  }
+
+  /**
+   * Executes PATCH request to kernel.
+   *
+   * @param string $url
+   *   Url or path.
+   * @param null|string $body
+   *   Body string.
+   * @param array $params
+   *   Params.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+   *   Kernel response.
+   */
+  public function patch($url, $body = NULL, $params = []) {
+
+    return $this->call($url, 'PATCH', $params, $body);
+  }
+
+  /**
+   * Executes DELETE request to kernel.
+   *
+   * @param string $url
+   *   Url or path.
+   * @param array $params
+   *   Params.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+   *   Kernel response.
+   */
+  public function delete($url, $params = []) {
+
+    return $this->call($url, 'DELETE', $params);
   }
 
   /**

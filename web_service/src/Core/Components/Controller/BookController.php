@@ -76,7 +76,7 @@ class BookController extends ResourceController {
       $book->map($data);
       $book->save();
 
-      return new JsonResponse($book, 201);
+      return new JsonResponse($book, 204);
     }
 
     return NULL;
