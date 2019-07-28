@@ -41,6 +41,12 @@ class CategoryBookRelationTest extends ModelTestCase {
     $this->assertFalse($book->has('categories'));
     $this->assertNotEmpty($book->get('categories'));
     $this->assertCount(2, $book->get('categories'));
+    $book = $this->bookFactory->generate(1, FALSE);
+    $book->set('categories', [$category,$secondCategory])->save();
+    $book = $this->bookStorage->find($book->getId());
+    $this->assertFalse($book->has('categories'));
+    $this->assertNotEmpty($book->get('categories'));
+    $this->assertCount(2, $book->get('categories'));
   }
 
 }
