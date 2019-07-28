@@ -84,4 +84,18 @@ class ResourceRoutesTest extends ModelTestCase {
     $this->assertEquals('Changed name', $book->get('name'));
   }
 
+  /**
+   * Test model update through api.
+   */
+  public function testDelete() {
+
+    $this->assertEmpty($this->bookStorage->all());
+    $book = $this->bookFactory->generate(1, TRUE);
+    $this->assertNotEmpty($this->bookStorage->all());
+    $res = $this->delete('/api/books' . $book->getId());
+    $this->assertEquals(200, $res->getStatusCode());
+    $this->assertEmpty($this->bookStorage->all());
+    $this->assertEmpty($this->bookStorage->find($book->getId()));
+  }
+
 }
