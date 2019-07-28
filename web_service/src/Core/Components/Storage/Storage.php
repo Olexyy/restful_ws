@@ -58,52 +58,13 @@ abstract class Storage implements StorageInterface {
    */
   public function find($id) {
 
-    $stmt = $this->database->getConnection()->prepare(
-      "SELECT * FROM {$this->table} WHERE id = :id"
-    );
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
-    $stmt->setFetchMode(PDO::FETCH_CLASS, $this->modelClass);
+    if ($id) {
+      $result = $this->getQuery()->addWhere('id', $id)->execute();
 
-    return $stmt->fetch();
-  }
-
-  /**
-   * Getter for field value.
-   *
-   * Sets default empty value for it if not set yet.
-   *
-   * @param ModelInterface $model
-   *   Model.
-   * @param $fieldName
-   *   Field name.
-   */
-  public function getFieldValue(ModelInterface $model, $fieldName) {
-
-    if ($field = $this->getField($fieldName)) {
-      if ($field->hasManyTrough()) {
-        $model->set($field->getName(), [], FALSE);
-        if ($id = $model->getId()) {
-          $query = "SELECT * FROM {$field->getJoinTable()}
-              JOIN {$field->getTable()}
-              ON {$field->getTable()}.{$field->getJoinField()} = {$field->getJoinTable()}.id
-              WHERE {$field->getTable()}.{$field->getField()} = :id";
-          $stmt = $this->database->getConnection()->prepare($query);
-          $stmt->bindParam(':id', $id);
-          $stmt->execute();
-          $stmt->setFetchMode(PDO::FETCH_CLASS, $field->getJoinClass());
-          $models = $stmt->fetchAll();
-          if ($models) {
-            $model->set($field->getName(), $models, FALSE);
-          }
-        }
-      }
-      else {
-        if (!$model->has($field->getName())) {
-          $model->set($field->getName(), NULL, FALSE);
-        }
-      }
+      return $result? current($result) : NULL;
     }
+
+    return NULL;
   }
 
   /**
@@ -113,24 +74,18 @@ abstract class Storage implements StorageInterface {
    */
   public function all() {
 
-    $stmt = $this->database->getConnection()->prepare("SELECT * FROM {$this->table}");
-    $stmt->execute();
-    $stmt->setFetchMode(PDO::FETCH_CLASS, $this->modelClass);
-
-    return $stmt->fetchAll();
+    return $this->getQuery()->execute();
   }
 
   /**
-   * Getter.
+   * Count query.
    *
-   * @return array|string[]
-   *   Fields.
+   * @return int
+   *   Result.
    */
-  public function getFields() {
+  public function count() {
 
-    return array_map(function (FieldInterface $field) {
-      return $field->getName();
-    },$this->getSchema());
+    return $this->getQuery()->setIsCount(TRUE)->execute();
   }
 
   /**
@@ -179,22 +134,54 @@ SQL
   }
 
   /**
-   * Count query.
+   * Getter for field value.
    *
-   * @return int
-   *   Result.
+   * Sets default empty value for it if not set yet.
+   *
+   * @param ModelInterface $model
+   *   Model.
+   * @param $fieldName
+   *   Field name.
    */
-  public function count() {
+  public function getFieldValue(ModelInterface $model, $fieldName) {
 
-    $query = <<<SQL
-SELECT COUNT(*) as count 
-FROM {$this->table}
-SQL;
-    $stmt = $this->database->getConnection()->query($query);
-    $stmt->setFetchMode(\PDO::FETCH_BOTH);
-    $res = $stmt->fetch();
+    if ($field = $this->getField($fieldName)) {
+      if ($field->hasManyTrough()) {
+        $model->set($field->getName(), [], FALSE);
+        if ($id = $model->getId()) {
+          $query = "SELECT * FROM {$field->getJoinTable()}
+              JOIN {$field->getTable()}
+              ON {$field->getTable()}.{$field->getJoinField()} = {$field->getJoinTable()}.id
+              WHERE {$field->getTable()}.{$field->getField()} = :id";
+          $stmt = $this->database->getConnection()->prepare($query);
+          $stmt->bindParam(':id', $id);
+          $stmt->execute();
+          $stmt->setFetchMode(PDO::FETCH_CLASS, $field->getJoinClass());
+          $models = $stmt->fetchAll();
+          if ($models) {
+            $model->set($field->getName(), $models, FALSE);
+          }
+        }
+      }
+      else {
+        if (!$model->has($field->getName())) {
+          $model->set($field->getName(), NULL, FALSE);
+        }
+      }
+    }
+  }
 
-    return (int) $res['count'];
+  /**
+   * Getter.
+   *
+   * @return array|string[]
+   *   Fields.
+   */
+  public function getFieldNames() {
+
+    return array_map(function (FieldInterface $field) {
+      return $field->getName();
+    },$this->getSchema());
   }
 
   /**
@@ -321,7 +308,7 @@ SQL;
    * @param QueryBuilderInterface $query
    *   Search query.
    *
-   * @return array|ModelInterface[]
+   * @return array|ModelInterface[]|int
    *   Collection of models.
    */
   public function where(QueryBuilderInterface $query) {
@@ -332,11 +319,30 @@ SQL;
       $stmt->bindParam($key, $params[$key]);
     }
     $stmt->execute();
-    $stmt->setFetchMode(PDO::FETCH_CLASS, $this->modelClass);
+    if ($query->isCount()) {
+      $stmt->setFetchMode(\PDO::FETCH_BOTH);
+      $res = $stmt->fetch();
 
-    return $stmt->fetchAll();
+      return (int) $res['count'];
+    }
+    else {
+      $stmt->setFetchMode(PDO::FETCH_CLASS, $this->modelClass);
+
+      return $stmt->fetchAll();
+    }
   }
 
+  /**
+   * Internal helper.
+   *
+   * @param array $valuesArray
+   *   Values from model.
+   * @param bool $prefixed
+   *   Flag define whether to prefix names.
+   *
+   * @return array
+   *   Field names.
+   */
   protected function extractFieldNames(array $valuesArray, $prefixed = FALSE) {
 
     $fieldNames = array_keys($valuesArray);
@@ -349,16 +355,43 @@ SQL;
     return $fieldNames;
   }
 
+  /**
+   * Internal helper.
+   *
+   * @param array $valuesArray
+   *   Values from model.
+   *
+   * @return array
+   *   Field values.
+   */
   protected function extractFieldValues(array $valuesArray) {
 
     return array_values($valuesArray);
   }
 
+  /**
+   * Internal helper.
+   *
+   * @param array $values
+   *   Values.
+   *
+   * @return string
+   *   Statement.
+   */
   protected function implodeForInsert(array $values) {
 
     return implode(', ', $values);
   }
 
+  /**
+   * Internal helper.
+   *
+   * @param array $valuesArray
+   *   Values.
+   *
+   * @return string
+   *   Statement.
+   */
   protected function implodeForUpdate(array $valuesArray) {
 
     $fieldNames = array_keys($valuesArray);
@@ -582,7 +615,10 @@ SQL;
   }
 
   /**
+   * Getter for model class name.
+   *
    * @return string
+   *   Value.
    */
   public function getModelClass() {
 

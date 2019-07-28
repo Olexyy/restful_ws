@@ -48,6 +48,11 @@ class QueryBuilder implements QueryBuilderInterface {
   protected $statementParams;
 
   /**
+   * @var bool
+   */
+  protected $isCount;
+
+  /**
    * @param StorageInterface $storage
    *
    * @return $this
@@ -73,6 +78,7 @@ class QueryBuilder implements QueryBuilderInterface {
     $this->whereOperator = 'AND';
     $this->statement = '';
     $this->statementParams = [];
+    $this->isCount = FALSE;
   }
 
   /**
@@ -139,7 +145,12 @@ class QueryBuilder implements QueryBuilderInterface {
 
     $this->statementParams = [];
     $table = $this->storage->getTable();
-    $statement = "SELECT * FROM {$table}";
+    if ($this->isCount) {
+      $statement = "SELECT count(*) as count FROM {$table}";
+    }
+    else {
+      $statement = "SELECT * FROM {$table}";
+    }
     $whereStatements = [];
     $joinStatements = [];
     foreach ($this->where as $where) {
@@ -240,12 +251,38 @@ class QueryBuilder implements QueryBuilderInterface {
   /**
    * Executes query.
    *
-   * @return array|ModelInterface[]
+   * @return array|ModelInterface[]|int
    *   Execution result.
    */
   public function execute() {
 
     return $this->storage->where($this);
+  }
+
+  /**
+   * Predicate.
+   *
+   * @return bool
+   *   Value.
+   */
+  public function isCount() {
+
+    return $this->isCount;
+  }
+
+  /**
+   * Is count query.
+   *
+   * @param bool $isCount
+   *   Flag.
+   *
+   * @return $this
+   *   Chaining.
+   */
+  public function setIsCount($isCount) {
+
+    $this->isCount = $isCount;
+    return $this;
   }
 
 }

@@ -55,7 +55,7 @@ interface StorageInterface {
    * @return array|string[]
    *   Fields.
    */
-  public function getFields();
+  public function getFieldNames();
 
   /**
    * Delete handler.
@@ -110,6 +110,9 @@ interface StorageInterface {
    *
    * @param QueryBuilderInterface $query
    *   Search query.
+   *
+   * @return array|ModelInterface[]|int
+   *   Collection of models.
    */
   public function where(QueryBuilderInterface $query);
 
@@ -156,7 +159,10 @@ interface StorageInterface {
   public function getTable();
 
   /**
+   * Getter for model class name.
+   *
    * @return string
+   *   Value.
    */
   public function getModelClass();
 

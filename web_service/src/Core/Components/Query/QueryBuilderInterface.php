@@ -51,12 +51,17 @@ interface QueryBuilderInterface {
   public function setOffset($offset);
 
   /**
-   * Builds query and returns statement.
+   * Add where condition.
    *
-   * Now we support AND operator
+   * @param string $field
+   *   Field name.
+   * @param mixed $value
+   *   Value.
+   * @param string $operator
+   *   Operator.
    *
-   * @return string
-   *   Statement.
+   * @return $this
+   *   Chaining.
    */
   public function addWhere($field, $value = NULL, $operator = '=');
 
@@ -90,9 +95,28 @@ interface QueryBuilderInterface {
   /**
    * Executes query.
    *
-   * @return array|ModelInterface[]
+   * @return array|ModelInterface[]|int
    *   Execution result.
    */
   public function execute();
+
+  /**
+   * Predicate.
+   *
+   * @return bool
+   *   Value.
+   */
+  public function isCount();
+
+  /**
+   * Is count query.
+   *
+   * @param bool $isCount
+   *   Flag.
+   *
+   * @return $this
+   *   Chaining.
+   */
+  public function setIsCount($isCount);
 
 }
