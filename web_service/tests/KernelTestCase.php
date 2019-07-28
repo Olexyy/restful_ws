@@ -76,6 +76,8 @@ abstract class KernelTestCase extends TestCase {
    *
    * @param string $url
    *   Url or path.
+   * @param array $params
+   *   Query params.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
    *   Kernel response.
