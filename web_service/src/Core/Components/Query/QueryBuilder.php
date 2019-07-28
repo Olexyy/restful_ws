@@ -53,6 +53,8 @@ class QueryBuilder implements QueryBuilderInterface {
   protected $isCount;
 
   /**
+   * Inline constructor.
+   *
    * @param StorageInterface $storage
    *
    * @return $this

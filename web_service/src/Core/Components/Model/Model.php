@@ -67,7 +67,7 @@ abstract class Model implements ModelInterface, \JsonSerializable {
    */
   protected function mapSelf($notify = FALSE) {
 
-    foreach (static::getStorage()->getFields() as $field) {
+    foreach (static::getStorage()->getFieldNames() as $field) {
       if (property_exists($this, $field)) {
         $this->set($field, $this->{$field}, $notify);
         unset($this->{$field});
@@ -85,7 +85,7 @@ abstract class Model implements ModelInterface, \JsonSerializable {
    */
   public function map(array $values = [], $notify = TRUE) {
 
-    foreach (static::getStorage()->getFields() as $field) {
+    foreach (static::getStorage()->getFieldNames() as $field) {
       if (array_key_exists($field, $values)) {
         $this->set($field, $values[$field], $notify);
       }

@@ -333,76 +333,6 @@ SQL;
   }
 
   /**
-   * Internal helper.
-   *
-   * @param array $valuesArray
-   *   Values from model.
-   * @param bool $prefixed
-   *   Flag define whether to prefix names.
-   *
-   * @return array
-   *   Field names.
-   */
-  protected function extractFieldNames(array $valuesArray, $prefixed = FALSE) {
-
-    $fieldNames = array_keys($valuesArray);
-    if ($prefixed) {
-      $fieldNames = array_map(function ($value) {
-        return ':' . $value;
-      }, $fieldNames);
-    }
-
-    return $fieldNames;
-  }
-
-  /**
-   * Internal helper.
-   *
-   * @param array $valuesArray
-   *   Values from model.
-   *
-   * @return array
-   *   Field values.
-   */
-  protected function extractFieldValues(array $valuesArray) {
-
-    return array_values($valuesArray);
-  }
-
-  /**
-   * Internal helper.
-   *
-   * @param array $values
-   *   Values.
-   *
-   * @return string
-   *   Statement.
-   */
-  protected function implodeForInsert(array $values) {
-
-    return implode(', ', $values);
-  }
-
-  /**
-   * Internal helper.
-   *
-   * @param array $valuesArray
-   *   Values.
-   *
-   * @return string
-   *   Statement.
-   */
-  protected function implodeForUpdate(array $valuesArray) {
-
-    $fieldNames = array_keys($valuesArray);
-    $fieldNames = array_map(function ($value) {
-      return $value.' = :' . $value;
-    }, $fieldNames);
-
-    return implode(',', $fieldNames);
-  }
-
-  /**
    * Execute result.
    *
    * @return bool
@@ -475,6 +405,59 @@ SQL;
     )->setPrimary();
 
     return $fields;
+  }
+
+  /**
+   * Getter for field.
+   *
+   * @param string $name
+   *   Name.
+   *
+   * @return FieldInterface|null
+   */
+  public function getField($name) {
+
+    foreach ($this->getSchema() as $field) {
+      if ($field->getName() == $name) {
+
+        return $field;
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Table getter.
+   *
+   * @return string
+   *   Value.
+   */
+  public function getTable() {
+
+    return $this->table;
+  }
+
+  /**
+   * Getter for model class name.
+   *
+   * @return string
+   *   Value.
+   */
+  public function getModelClass() {
+
+    return $this->modelClass;
+  }
+
+  /**
+   * Getter for query.
+   *
+   * @return QueryBuilderInterface
+   *   Query builder.
+   */
+  public function getQuery() {
+
+    return QueryBuilder::create($this);
   }
 
   /**
@@ -584,56 +567,73 @@ SQL;
   }
 
   /**
-   * Getter for field.
+   * Internal helper.
    *
-   * @param string $name
-   *   Name.
+   * @param array $valuesArray
+   *   Values from model.
+   * @param bool $prefixed
+   *   Flag define whether to prefix names.
    *
-   * @return FieldInterface|null
+   * @return array
+   *   Field names.
    */
-  public function getField($name) {
+  protected function extractFieldNames(array $valuesArray, $prefixed = FALSE) {
 
-    foreach ($this->getSchema() as $field) {
-      if ($field->getName() == $name) {
-
-        return $field;
-      }
+    $fieldNames = array_keys($valuesArray);
+    if ($prefixed) {
+      $fieldNames = array_map(function ($value) {
+        return ':' . $value;
+      }, $fieldNames);
     }
 
-    return NULL;
+    return $fieldNames;
   }
 
   /**
-   * Table getter.
+   * Internal helper.
+   *
+   * @param array $valuesArray
+   *   Values from model.
+   *
+   * @return array
+   *   Field values.
+   */
+  protected function extractFieldValues(array $valuesArray) {
+
+    return array_values($valuesArray);
+  }
+
+  /**
+   * Internal helper.
+   *
+   * @param array $values
+   *   Values.
    *
    * @return string
-   *   Value.
+   *   Statement.
    */
-  public function getTable() {
+  protected function implodeForInsert(array $values) {
 
-    return $this->table;
+    return implode(', ', $values);
   }
 
   /**
-   * Getter for model class name.
+   * Internal helper.
+   *
+   * @param array $valuesArray
+   *   Values.
    *
    * @return string
-   *   Value.
+   *   Statement.
    */
-  public function getModelClass() {
+  protected function implodeForUpdate(array $valuesArray) {
 
-    return $this->modelClass;
-  }
+    $fieldNames = array_keys($valuesArray);
+    $fieldNames = array_map(function ($value) {
+      return $value.' = :' . $value;
+    }, $fieldNames);
 
-  /**
-   * Getter for query.
-   *
-   * @return QueryBuilderInterface
-   *   Query builder.
-   */
-  public function getQuery() {
-
-    return QueryBuilder::create($this);
+    return implode(',', $fieldNames);
   }
 
 }
