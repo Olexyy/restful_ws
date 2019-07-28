@@ -5,11 +5,11 @@ Provides very basic restful web service.
 ### Tips:
  - Uses composer autoloader and some Symfony dependencies so `composer install` should be run in `web_service` scope.
  - Uses `docker-compose` so `docker` and `docker-compose` should be installed.
- - Ports are `8000` for Apache and `3306` Mysql.
+ - Ports are `8000` for Apache and `3307` Mysql.
  - To run project in container run `docker-compose up` in root scope.
  - Default health check endpoint is `http://localhost:8000`.
  - Run tests: `docker-compose exec php php ./vendor/bin/phpunit` from root scope.
- - Seed database and ensure tables:
+ - Seed database to ensure tables and fill up content:
    `docker-compose exec php php seed.php 5 30`
    First param is used for `categories` count. Second is for `books` count.
    Params are not required.
@@ -32,7 +32,7 @@ Provides very basic restful web service.
  curl localhost:8000/api/books/1 -X DELETE
  ```
  
-  - Examples of query usage:
+  - Examples of search query usage:
   ```
   // Get all books with category 2.
   http://localhost:8000/api/books?filter[1][name]=categories&filter[1][value]=2
@@ -46,4 +46,6 @@ Provides very basic restful web service.
   // Get 2 books with ids 16 and 17.
   http://localhost:8000/api/books?filter[1][name]=id&filter[1][value][]=16&filter[1][value][]=17&filter[1][op]=IN
   ```
-
+  - Pagination:
+    - is supported through `page` query param;
+    - first page is `1`, non existent return empty array;
